@@ -5,94 +5,89 @@ import java.util.Scanner;
 
 public class Security {
 	public static void main(String args[]) throws IOException {
-		// objects
 		Scanner sc = new Scanner(System.in);
 		Password pw = new Password();
 		TextFile txt = new TextFile();
 		
-		// choice of menu option
+		
+		System.out.println("Create a new password:");
+		pw.create(sc);
+		pw.encryption();
+		
 		int menuOption = menu(sc);
+	
+		while(menuOption!= 0) {
+			// 1. creates  a password
+			// 2. checks if it meets requirements
+			// 3. then encrypts it
+			if(menuOption == 1) {
+				boolean check = false;
+				System.out.println("Enter your old password to continue:");
+				check = pw.match(sc.next());
+				if(check==true) {
+					System.out.println("Enter your new password:");
+					pw.create(sc);
+					pw.encryption();
+				}
+				check=false;
+				menuOption = menu(sc);
+				}
 		
-		// different options according to menu choice
-		
-		// break loop if incorrect menu choice
-		if(menuOption == 0) {
-			
-		}
-		
-		// 1. creates  a password
-		// 2. checks if it meets requirements
-		// 3. then encrypts it
-		if(menuOption == 1) {
-			// 1 and 2
-			pw = pwCreate(pw,sc);
-			// 3 
-			pw.encryption();
-		}
-		
-		// 1. asks user name of file an creates it
-		// 2. asks user to fill the file
-		// 3. then encrypts the file
-		if(menuOption == 2) {
-			// 1
-			System.out.println("Name of text file:");
-			txt.setName(sc.next());
-			txt.create(txt.getName());
-			
-			// 2
-			System.out.println("Fill the text file:");
-			txt.setFillData(sc.next());
-			txt.fill(txt.getFillData());
-			
-			// 3
-			txt.encryption();
+			// 1. creates file name Sentence.txt
+			// 2. asks user to fill the file
+			// 3. then encrypts the file
+			if(menuOption == 2) {
+				boolean check = false;
+				System.out.println("Enter your password to continue:");
+				check = pw.match(sc.next());
+				if(check==true) {
+					txt.create();
+					System.out.println("Fill the text file:");
+					sc.nextLine();
+					txt.setFillData(sc.nextLine());
+					txt.fill(txt.getFillData());
+					txt.encryption();
+					
+				}
+				check=false;
+				menuOption = menu(sc);
 			}
-		
-		// 1. decrypts file
-		// 2. displays the file
-		if(menuOption == 3) {
-			// 2
-			txt.display();
+			
+			// 1. decrypts file
+			// 2. displays the file
+			if(menuOption == 3) {
+				
+				boolean check = false;
+				System.out.println("Enter your password to continue:");
+				check = pw.match(sc.next());
+				if(check==true) {
+					txt.decryption();
+					txt.display();
+					txt.encryption();
+				}
+				check=false;
+				menuOption = menu(sc);
+			}
+			
+			//quit option to end the program
+			if(menuOption == 4) {
+				menuOption = 0;
+			}
 		}
-		
 		sc.close();
 	}
 	
 	public static int menu(Scanner sc) {
 		int option = 0;
 		
-		System.out.println("Menu");
-		System.out.println("1. Password Creation");
-		System.out.println("2. Text File Creation");
+		System.out.println("1. Create New Password");
+		System.out.println("2. Create Text File");
 		System.out.println("3. Display Text File");
-		
+		System.out.println("4. Quit");
+
 		option = sc.nextInt();
-		
 		if(option<1||3<option)
 			option = 0;
-		
 		return option;
-	}
-	
-	public static Password pwCreate(Password pass,Scanner sc) {
-		
-		// asks user for password and sets it in pw object
-		System.out.println("Enter a Password:");
-		pass.setPassword(sc.next());
-		
-		// verifys the pw
-		boolean valid = pass.verify();
-		
-		// if not valid, asks user to enter again until valid
-		while(valid==false) {
-			System.out.println("Enter a VALID Password");
-			pass.setPassword(sc.next());
-			valid = pass.verify();
-		}
-		if(valid==true)
-			System.out.println("Password is VALID");
-		
-		//returns correct this Password pass Object
-		return pass;
 	}
 }
