@@ -1,5 +1,7 @@
 package EncryptionSim;
 
+import java.util.Scanner;
+
 public class Password {
 	private String password;
 	
@@ -13,6 +15,17 @@ public class Password {
 	
 	public String getPassword() {
 		return this.password;
+	}
+	
+	public void create(Scanner sc) {
+		this.setPassword(sc.next());
+		boolean valid = this.verify();
+		// if not valid, asks user to enter again until valid
+		while(valid==false) {
+			System.out.println("Enter a VALID Password");
+			this.setPassword(sc.next());
+			valid = this.verify();
+		}
 	}
 	
 	public boolean length() {
@@ -101,7 +114,7 @@ public class Password {
 		
 		return check;
 	}
-	
+
 	// uses ascii values
 	// adds one value to each char of the string
 	public void encryption() {
@@ -114,6 +127,27 @@ public class Password {
 		for(int i =0;i<asciiStr.length;i++) {
 			this.password = this.password + (char)asciiStr[i];
 		}
+	}
+	
+	public void decryption() {
+		int asciiStr[] = new int[this.password.length()];
+		
+		for(int i =0;i<this.password.length();i++) {
+			asciiStr[i] = (this.password.charAt(i)) - 1;
+		}
+		this.password = "";
+		for(int i =0;i<asciiStr.length;i++) {
+			this.password = this.password + (char)asciiStr[i];
+		}
+	}
+	
+	public boolean match(String match) {
+		boolean check = false;
+		this.decryption();
+		if(match.equals(this.getPassword()))
+			check=true;
+		this.encryption();
+		return check;
 	}
 	
 }
